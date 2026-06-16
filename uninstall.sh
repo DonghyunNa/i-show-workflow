@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Remove i-show-workflow from ~/.claude/ — leaves logs in place by default.
+# Also cleans up legacy install paths (dashboard-log.sh, tools/claude-watch/).
 #   --purge-logs   also delete ~/.claude/logs/events.jsonl
 set -euo pipefail
 
@@ -17,17 +18,21 @@ SETTINGS="$CLAUDE_DIR/settings.json"
 
 command -v jq >/dev/null || { echo "jq is required (brew install jq)" >&2; exit 1; }
 
-# 1) remove symlinks (only ours)
+# 1) remove symlinks (current + legacy)
 for link in \
+  "$CLAUDE_DIR/hooks/i-show-workflow.sh" \
+  "$CLAUDE_DIR/hooks/i-show-workflow-async.sh" \
+  "$CLAUDE_DIR/tools/i-show-workflow/watch.py" \
   "$CLAUDE_DIR/hooks/dashboard-log.sh" \
   "$CLAUDE_DIR/hooks/dashboard-log-async.sh" \
   "$CLAUDE_DIR/tools/claude-watch/watch.py"; do
   if [ -L "$link" ]; then rm "$link"; echo "  removed $link"; fi
 done
-# empty viewer dir
-rmdir "$CLAUDE_DIR/tools/claude-watch" 2>/dev/null || true
+# empty viewer dirs
+rmdir "$CLAUDE_DIR/tools/i-show-workflow" 2>/dev/null || true
+rmdir "$CLAUDE_DIR/tools/claude-watch"    2>/dev/null || true
 
-# 2) settings.json — strip our hook entries
+# 2) settings.json — strip our hook entries (current + legacy names)
 if [ -f "$SETTINGS" ]; then
   BACKUP="$SETTINGS.bak.$(date +%s)"
   cp "$SETTINGS" "$BACKUP"
@@ -36,7 +41,7 @@ if [ -f "$SETTINGS" ]; then
       .hooks[$key] = ((.hooks[$key] // [])
         | map(select(
             [ .hooks[]?.command // "" ]
-            | any(test("dashboard-log"))
+            | any(test("i-show-workflow|dashboard-log"))
             | not)));
 
     if .hooks == null then . else

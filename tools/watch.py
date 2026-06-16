@@ -11,7 +11,7 @@ Tails ~/.claude/logs/events.jsonl and renders per-session activity:
   - which subagent type is doing what
 
 Run in a separate terminal window while you work in Claude Code:
-    uv run ~/.claude/tools/claude-watch/watch.py
+    uv run ~/.claude/tools/i-show-workflow/watch.py
 
 Keys: q / Ctrl-C to quit.
 """

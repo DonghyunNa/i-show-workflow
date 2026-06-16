@@ -32,7 +32,7 @@ The installer is idempotent — re-run it to update or change options.
 In a separate terminal:
 
 ```bash
-uv run ~/.claude/tools/claude-watch/watch.py
+uv run ~/.claude/tools/i-show-workflow/watch.py
 ```
 
 Quit with `q` or `Ctrl-C`. First run takes a few seconds (uv fetches `rich`); subsequent runs start instantly.
@@ -46,7 +46,7 @@ Quit with `q` or `Ctrl-C`. First run takes a few seconds (uv fetches `rich`); su
 [hooks API]  ← Claude Code's official extension mechanism
      │ runs your registered command, pipes the event JSON over stdin
      ▼
-[dashboard-log.sh]  ← 7-line shell script
+[i-show-workflow.sh]  ← 7-line shell script
      │ appends one line per event to ~/.claude/logs/events.jsonl
      ▼
 [~/.claude/logs/events.jsonl]
@@ -116,7 +116,7 @@ Heavy usage produces ~5 MB/day in default mode (Agent/Task only) or ~50 MB/day i
 No. Hooks are an official, documented feature.
 
 **What if I already have hooks registered?**
-Install / uninstall match on the literal string `dashboard-log` in the command path. Your other hooks are untouched.
+Install / uninstall match on the literal strings `i-show-workflow` and `dashboard-log` (the legacy name) in the command path. Your other hooks are untouched.
 
 **Why JSONL on disk instead of a socket / shared memory?**
 A file is the simplest contract that survives Claude Code restarts, multiple sessions, and a viewer that comes and goes. The performance ceiling is way higher than what hooks need.
