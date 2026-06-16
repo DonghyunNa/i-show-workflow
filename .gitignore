@@ -1,3 +1,36 @@
+# OS
 .DS_Store
+Thumbs.db
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python (uv inline-script cache, ad-hoc tests)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.python-version
+
+# Claude Code working files (if anyone runs Claude inside the repo)
+.claude/
+CLAUDE.local.md
+
+# Backups & logs (settings.json.bak.*, ad-hoc test logs)
+*.bak
+*.bak.*
 *.log
+events.jsonl
+
+# Secrets, in case
+.env
+.env.*
+!.env.example
+
+# Local screenshot drafts
 docs/screenshot.png.tmp
